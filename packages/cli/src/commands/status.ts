@@ -2,11 +2,7 @@ import { readdir } from "node:fs/promises";
 import { join } from "node:path";
 import chalk from "chalk";
 import Table from "cli-table3";
-import {
-  tryLoadManifest,
-  DEFAULT_ARTIFACTS_DIR,
-  type WorkflowManifest,
-} from "@chrismlittle123/maestro-sdk";
+import { tryLoadManifest, DEFAULT_ARTIFACTS_DIR, type WorkflowManifest } from "maestro-agents-sdk";
 
 interface StatusOptions {
   limit?: number;

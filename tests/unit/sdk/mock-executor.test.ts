@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { MockClaudeCodeExecutor } from "@chrismlittle123/maestro-sdk";
-import type { AgentExecutionInput } from "@chrismlittle123/maestro-core";
+import { MockClaudeCodeExecutor } from "maestro-agents-sdk";
+import type { AgentExecutionInput } from "maestro-agents-core";
 
 describe("MockClaudeCodeExecutor", () => {
   let executor: MockClaudeCodeExecutor;

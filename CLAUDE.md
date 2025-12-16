@@ -10,28 +10,28 @@ Maestro is a framework for orchestrating AI coding agents that work together lik
 
 ```
         ┌─────────────────────────────────────┐
-        │           Presentation              │  ← CLI, Slack bot, Web UI
-        │  (@chrismlittle123/maestro-cli)     │
+        │           Presentation              │  ← CLI (mstr), Slack bot, Web UI
+        │         (maestro-agents)            │
         └─────────────────┬───────────────────┘
                           │
         ┌─────────────────▼───────────────────┐
         │           Application               │  ← Use cases, public API
-        │  (@chrismlittle123/maestro-sdk)     │
+        │       (maestro-agents-sdk)          │
         └─────────────────┬───────────────────┘
                           │
         ┌─────────────────▼───────────────────┘
         │             Domain                  │  ← Business logic, types
-        │  (@chrismlittle123/maestro-core)    │
+        │       (maestro-agents-core)         │
         └─────────────────────────────────────┘
 ```
 
 ### Package Responsibilities
 
-| Package                         | Layer        | Purpose                                                          |
-| ------------------------------- | ------------ | ---------------------------------------------------------------- |
-| `@chrismlittle123/maestro-core` | Domain       | Internal engine: types, Conductor, WorkflowEngine, interfaces    |
-| `@chrismlittle123/maestro-sdk`  | Application  | Public API: Maestro class, event subscriptions, workflow control |
-| `@chrismlittle123/maestro-cli`  | Presentation | Reference CLI: terminal commands for end users                   |
+| Package               | Layer        | Purpose                                                          |
+| --------------------- | ------------ | ---------------------------------------------------------------- |
+| `maestro-agents-core` | Domain       | Internal engine: types, Conductor, WorkflowEngine, interfaces    |
+| `maestro-agents-sdk`  | Application  | Public API: Maestro class, event subscriptions, workflow control |
+| `maestro-agents`      | Presentation | Reference CLI (`mstr`): terminal commands for end users          |
 
 ## Clean Architecture Rules
 
@@ -46,10 +46,10 @@ Dependencies MUST point inward only:
 
 ```typescript
 // ✅ Correct: SDK imports from Core
-import type { MaestroEvent } from "@chrismlittle123/maestro-core";
+import type { MaestroEvent } from "maestro-agents-core";
 
 // ❌ Wrong: Core should NEVER import from SDK or CLI
-import { Maestro } from "@chrismlittle123/maestro-sdk"; // FORBIDDEN in core
+import { Maestro } from "maestro-agents-sdk"; // FORBIDDEN in core
 ```
 
 ### 2. Core Defines Interfaces, Outer Layers Implement
@@ -57,7 +57,7 @@ import { Maestro } from "@chrismlittle123/maestro-sdk"; // FORBIDDEN in core
 Core defines abstractions. SDK/infrastructure provides concrete implementations.
 
 ```typescript
-// In @chrismlittle123/maestro-core - define the interface
+// In maestro-agents-core - define the interface
 export interface AgentExecutor {
   execute(input: AgentExecutionInput): Promise<AgentExecutionOutput>;
 }
@@ -67,7 +67,7 @@ export interface ArtifactStore {
   load(artifactId: string): Promise<Buffer>;
 }
 
-// In @chrismlittle123/maestro-sdk or infrastructure - implement it
+// In maestro-agents-sdk or infrastructure - implement it
 class ClaudeCodeExecutor implements AgentExecutor { ... }
 class FileSystemStore implements ArtifactStore { ... }
 class S3Store implements ArtifactStore { ... }
@@ -89,7 +89,7 @@ SDK exposes a stable public API. Internal core changes should not break SDK cons
 
 ```typescript
 // ✅ SDK re-exports stable types
-export type { WorkflowConfig, MaestroEvent } from "@chrismlittle123/maestro-core";
+export type { WorkflowConfig, MaestroEvent } from "maestro-agents-core";
 
 // SDK provides stable Maestro class that wraps internal complexity
 export class Maestro {

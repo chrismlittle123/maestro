@@ -1,5 +1,5 @@
 {
-  "name": "@chrismlittle123/maestro-core",
+  "name": "maestro-agents-core",
   "version": "0.1.0",
   "description": "Core orchestration engine for Maestro",
   "author": "Chris Little",

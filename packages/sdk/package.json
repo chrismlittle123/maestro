@@ -1,5 +1,5 @@
 {
-  "name": "@chrismlittle123/maestro-sdk",
+  "name": "maestro-agents-sdk",
   "version": "0.1.0",
   "description": "Public SDK for Maestro - programmatic API for builders",
   "author": "Chris Little",
@@ -40,7 +40,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@chrismlittle123/maestro-core": "*"
+    "maestro-agents-core": "*"
   },
   "devDependencies": {
     "@types/node": "^25.0.0",

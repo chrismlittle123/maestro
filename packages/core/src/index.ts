@@ -1,5 +1,5 @@
 /**
- * @chrismlittle123/maestro-core - Core orchestration engine
+ * maestro-agents-core - Core orchestration engine
  *
  * This package contains the internal engine for Maestro:
  * - Workflow engine
@@ -48,7 +48,7 @@ export {
 } from "./artifacts/index.js";
 export type { WorkflowManifest, ManifestStep, StepStatus } from "./artifacts/index.js";
 
-// Note: Executors (ClaudeCodeExecutor, MockClaudeCodeExecutor) have been moved to @chrismlittle123/maestro-sdk
+// Note: Executors (ClaudeCodeExecutor, MockClaudeCodeExecutor) have been moved to maestro-agents-sdk
 // to maintain clean architecture. Core only defines the AgentExecutor interface.
 
 // Core classes

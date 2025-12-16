@@ -49,7 +49,7 @@ steps:
 Then you run it:
 
 ```bash
-maestro run my-workflow --input "Build a user settings page"
+mstr run my-workflow --input "Build a user settings page"
 ```
 
 Maestro handles the rest - running each agent, passing files between them, and pausing when it needs your approval.
@@ -72,18 +72,18 @@ Maestro handles the rest - running each agent, passing files between them, and p
 ### CLI (for end users)
 
 ```bash
-npm install -g @chrismlittle123/maestro-cli
-maestro --help
+npm install -g maestro-agents
+mstr --help
 ```
 
 ### SDK (for programmatic use)
 
 ```bash
-npm install @chrismlittle123/maestro-sdk
+npm install maestro-agents-sdk
 ```
 
 ```typescript
-import { Maestro } from "@chrismlittle123/maestro-sdk";
+import { Maestro } from "maestro-agents-sdk";
 
 const maestro = new Maestro({ projectRoot: "./my-project" });
 const run = await maestro.runWorkflow("my-workflow", { input: "Build a feature" });
@@ -91,11 +91,11 @@ const run = await maestro.runWorkflow("my-workflow", { input: "Build a feature" 
 
 ## Packages
 
-| Package                                                                                        | Description                      |
-| ---------------------------------------------------------------------------------------------- | -------------------------------- |
-| [`@chrismlittle123/maestro-cli`](https://www.npmjs.com/package/@chrismlittle123/maestro-cli)   | CLI for running workflows        |
-| [`@chrismlittle123/maestro-sdk`](https://www.npmjs.com/package/@chrismlittle123/maestro-sdk)   | SDK for programmatic integration |
-| [`@chrismlittle123/maestro-core`](https://www.npmjs.com/package/@chrismlittle123/maestro-core) | Core engine (internal)           |
+| Package                                                                    | Description                      |
+| -------------------------------------------------------------------------- | -------------------------------- |
+| [`maestro-agents`](https://www.npmjs.com/package/maestro-agents)           | CLI for running workflows        |
+| [`maestro-agents-sdk`](https://www.npmjs.com/package/maestro-agents-sdk)   | SDK for programmatic integration |
+| [`maestro-agents-core`](https://www.npmjs.com/package/maestro-agents-core) | Core engine (internal)           |
 
 ## Status
 

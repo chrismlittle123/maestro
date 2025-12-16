@@ -1,5 +1,5 @@
 {
-  "name": "@chrismlittle123/maestro-cli",
+  "name": "maestro-agents",
   "version": "0.1.0",
   "description": "CLI for Maestro - orchestrate AI coding agents",
   "author": "Chris Little",
@@ -23,7 +23,7 @@
   ],
   "type": "module",
   "bin": {
-    "maestro": "./dist/cli.js"
+    "mstr": "./dist/cli.js"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -43,7 +43,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@chrismlittle123/maestro-sdk": "*",
+    "maestro-agents-sdk": "*",
     "chalk": "^5.3.0",
     "cli-table3": "^0.6.5",
     "commander": "^12.1.0",

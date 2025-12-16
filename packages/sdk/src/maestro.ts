@@ -1,6 +1,6 @@
 import { join } from "node:path";
 import { readdir, readFile } from "node:fs/promises";
-import type { MaestroEvent, AgentExecutor, WorkflowRun } from "@chrismlittle123/maestro-core";
+import type { MaestroEvent, AgentExecutor, WorkflowRun } from "maestro-agents-core";
 import {
   WorkflowEngine,
   FileSystemArtifactStore,
@@ -11,7 +11,7 @@ import {
   tryLoadManifest,
   type AgentDefinition,
   type WorkflowConfig,
-} from "@chrismlittle123/maestro-core";
+} from "maestro-agents-core";
 import { MockClaudeCodeExecutor } from "./executors/mock-executor.js";
 
 /**
@@ -96,7 +96,7 @@ type EventHandler<T extends MaestroEvent = MaestroEvent> = (event: T) => void | 
  *
  * @example
  * ```typescript
- * import { Maestro } from '@chrismlittle123/maestro-sdk'
+ * import { Maestro } from 'maestro-agents-sdk'
  *
  * const maestro = new Maestro({
  *   workflowsDir: './workflows',

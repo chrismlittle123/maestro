@@ -3,13 +3,7 @@
   "changelog": ["@changesets/changelog-github", { "repo": "chrismlittle123/maestro" }],
   "commit": false,
   "fixed": [],
-  "linked": [
-    [
-      "@chrismlittle123/maestro-core",
-      "@chrismlittle123/maestro-sdk",
-      "@chrismlittle123/maestro-cli"
-    ]
-  ],
+  "linked": [["maestro-agents-core", "maestro-agents-sdk", "maestro-agents"]],
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
