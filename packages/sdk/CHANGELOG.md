@@ -1,5 +1,11 @@
 # maestro-agents-sdk
 
+## 0.1.2
+
+### Patch Changes
+
+- [`1daafb8`](https://github.com/chrismlittle123/maestro/commit/1daafb8f9885e8b947fd092b2cc46b8164121f0d) Thanks [@chrismlittle123](https://github.com/chrismlittle123)! - Test OIDC trusted publishing
+
 ## 0.1.1
 
 ### Patch Changes
