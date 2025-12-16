@@ -1,7 +1,26 @@
 {
-  "name": "@maestro/sdk",
+  "name": "@chrismlittle123/maestro-sdk",
   "version": "0.1.0",
   "description": "Public SDK for Maestro - programmatic API for builders",
+  "author": "Chris Little",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chrismlittle123/maestro.git",
+    "directory": "packages/sdk"
+  },
+  "homepage": "https://github.com/chrismlittle123/maestro#readme",
+  "bugs": {
+    "url": "https://github.com/chrismlittle123/maestro/issues"
+  },
+  "keywords": [
+    "ai",
+    "agents",
+    "orchestration",
+    "workflow",
+    "maestro",
+    "sdk"
+  ],
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -21,7 +40,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@maestro/core": "*"
+    "@chrismlittle123/maestro-core": "*"
   },
   "devDependencies": {
     "@types/node": "^25.0.0",

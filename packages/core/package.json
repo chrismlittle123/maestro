@@ -1,7 +1,25 @@
 {
-  "name": "@maestro/core",
+  "name": "@chrismlittle123/maestro-core",
   "version": "0.1.0",
   "description": "Core orchestration engine for Maestro",
+  "author": "Chris Little",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chrismlittle123/maestro.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://github.com/chrismlittle123/maestro#readme",
+  "bugs": {
+    "url": "https://github.com/chrismlittle123/maestro/issues"
+  },
+  "keywords": [
+    "ai",
+    "agents",
+    "orchestration",
+    "workflow",
+    "maestro"
+  ],
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { InMemoryEventBus } from "@maestro/core";
-import type { MaestroEvent } from "@maestro/core";
+import { InMemoryEventBus } from "@chrismlittle123/maestro-core";
+import type { MaestroEvent } from "@chrismlittle123/maestro-core";
 
 describe("InMemoryEventBus", () => {
   let bus: InMemoryEventBus;

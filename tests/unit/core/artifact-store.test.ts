@@ -2,8 +2,8 @@ import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { mkdir, rm, readFile, readdir } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
-import { FileSystemArtifactStore } from "@maestro/core";
-import type { Artifact } from "@maestro/core";
+import { FileSystemArtifactStore } from "@chrismlittle123/maestro-core";
+import type { Artifact } from "@chrismlittle123/maestro-core";
 
 describe("FileSystemArtifactStore", () => {
   let store: FileSystemArtifactStore;
@@ -47,10 +47,7 @@ describe("FileSystemArtifactStore", () => {
 
       await store.save(artifact, "# Hello World");
 
-      const content = await readFile(
-        join(tempDir, "run-123", "step1", "result.md"),
-        "utf-8"
-      );
+      const content = await readFile(join(tempDir, "run-123", "step1", "result.md"), "utf-8");
       expect(content).toBe("# Hello World");
     });
 
@@ -68,9 +65,7 @@ describe("FileSystemArtifactStore", () => {
       const buffer = Buffer.from([0x48, 0x65, 0x6c, 0x6c, 0x6f]); // "Hello"
       await store.save(artifact, buffer);
 
-      const content = await readFile(
-        join(tempDir, "run-123", "step1", "data.bin")
-      );
+      const content = await readFile(join(tempDir, "run-123", "step1", "data.bin"));
       expect(content.toString()).toBe("Hello");
     });
 
@@ -105,10 +100,7 @@ describe("FileSystemArtifactStore", () => {
       await store.save(artifact, "First content");
       await store.save(artifact, "Second content");
 
-      const content = await readFile(
-        join(tempDir, "run-123", "step1", "result.md"),
-        "utf-8"
-      );
+      const content = await readFile(join(tempDir, "run-123", "step1", "result.md"), "utf-8");
       expect(content).toBe("Second content");
     });
 

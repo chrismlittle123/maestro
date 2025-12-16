@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { Maestro } from "./maestro.js";
 
-describe("@maestro/sdk", () => {
+describe("@chrismlittle123/maestro-sdk", () => {
   it("should create a Maestro instance", () => {
     const maestro = new Maestro({
       workflowsDir: "./workflows",

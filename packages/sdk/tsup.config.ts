@@ -11,4 +11,5 @@ export default defineConfig({
   sourcemap: true,
   clean: true,
   target: "node22",
+  external: ["@chrismlittle123/maestro-core"],
 });

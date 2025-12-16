@@ -1,7 +1,26 @@
 {
-  "name": "maestro-cli",
+  "name": "@chrismlittle123/maestro-cli",
   "version": "0.1.0",
   "description": "CLI for Maestro - orchestrate AI coding agents",
+  "author": "Chris Little",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chrismlittle123/maestro.git",
+    "directory": "packages/cli"
+  },
+  "homepage": "https://github.com/chrismlittle123/maestro#readme",
+  "bugs": {
+    "url": "https://github.com/chrismlittle123/maestro/issues"
+  },
+  "keywords": [
+    "ai",
+    "agents",
+    "orchestration",
+    "workflow",
+    "maestro",
+    "cli"
+  ],
   "type": "module",
   "bin": {
     "maestro": "./dist/cli.js"
@@ -24,7 +43,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@maestro/sdk": "*",
+    "@chrismlittle123/maestro-sdk": "*",
     "chalk": "^5.3.0",
     "cli-table3": "^0.6.5",
     "commander": "^12.1.0",

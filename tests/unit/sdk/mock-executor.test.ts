@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { MockClaudeCodeExecutor } from "@maestro/sdk";
-import type { AgentExecutionInput } from "@maestro/core";
+import { MockClaudeCodeExecutor } from "@chrismlittle123/maestro-sdk";
+import type { AgentExecutionInput } from "@chrismlittle123/maestro-core";
 
 describe("MockClaudeCodeExecutor", () => {
   let executor: MockClaudeCodeExecutor;
@@ -205,11 +205,7 @@ describe("MockClaudeCodeExecutor", () => {
       const result2 = await executor.execute(input2);
       const result3 = await executor.execute(input3);
 
-      const ids = [
-        result1.artifacts[0].id,
-        result2.artifacts[0].id,
-        result3.artifacts[0].id,
-      ];
+      const ids = [result1.artifacts[0].id, result2.artifacts[0].id, result3.artifacts[0].id];
 
       // All IDs should be unique
       expect(new Set(ids).size).toBe(3);

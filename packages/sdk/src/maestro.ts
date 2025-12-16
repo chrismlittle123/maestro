@@ -1,6 +1,6 @@
 import { join } from "node:path";
 import { readdir, readFile } from "node:fs/promises";
-import type { MaestroEvent, AgentExecutor, WorkflowRun } from "@maestro/core";
+import type { MaestroEvent, AgentExecutor, WorkflowRun } from "@chrismlittle123/maestro-core";
 import {
   WorkflowEngine,
   FileSystemArtifactStore,
@@ -11,7 +11,7 @@ import {
   tryLoadManifest,
   type AgentDefinition,
   type WorkflowConfig,
-} from "@maestro/core";
+} from "@chrismlittle123/maestro-core";
 import { MockClaudeCodeExecutor } from "./executors/mock-executor.js";
 
 /**
@@ -96,7 +96,7 @@ type EventHandler<T extends MaestroEvent = MaestroEvent> = (event: T) => void | 
  *
  * @example
  * ```typescript
- * import { Maestro } from '@maestro/sdk'
+ * import { Maestro } from '@chrismlittle123/maestro-sdk'
  *
  * const maestro = new Maestro({
  *   workflowsDir: './workflows',
@@ -140,10 +140,7 @@ export class Maestro {
   /**
    * Run a workflow
    */
-  async runWorkflow(
-    workflowName: string,
-    options: { input: string }
-  ): Promise<WorkflowRunHandle> {
+  async runWorkflow(workflowName: string, options: { input: string }): Promise<WorkflowRunHandle> {
     // Load workflow
     const workflow = await this.loadWorkflowFile(workflowName);
 

@@ -14,7 +14,7 @@ import {
   type WorkflowConfig,
   type AgentDefinition,
   type MaestroEvent,
-} from "@maestro/sdk";
+} from "@chrismlittle123/maestro-sdk";
 
 interface RunOptions {
   input?: string;

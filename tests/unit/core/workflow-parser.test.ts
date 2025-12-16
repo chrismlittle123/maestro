@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { parseWorkflow, WorkflowParseError } from "@maestro/core";
+import { parseWorkflow, WorkflowParseError } from "@chrismlittle123/maestro-core";
 
 describe("parseWorkflow", () => {
   describe("valid workflows", () => {

@@ -1,5 +1,5 @@
 /**
- * @maestro/sdk - Public SDK for Maestro
+ * @chrismlittle123/maestro-sdk - Public SDK for Maestro
  *
  * Programmatic interface for building integrations:
  * - Custom CLI tools
@@ -27,7 +27,7 @@ export type {
   AgentDefinition,
   WorkflowRun,
   WorkflowEngineConfig,
-} from "@maestro/core";
+} from "@chrismlittle123/maestro-core";
 
 // Re-export core utilities needed by consumers
 export {
@@ -52,7 +52,7 @@ export {
   saveManifest,
   loadManifest,
   tryLoadManifest,
-} from "@maestro/core";
+} from "@chrismlittle123/maestro-core";
 
 // Executors (implementations live in SDK, not core)
 export { ClaudeCodeExecutor, MockClaudeCodeExecutor } from "./executors/index.js";

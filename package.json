@@ -19,9 +19,13 @@
     "test:coverage": "vitest run --coverage",
     "test:e2e": "vitest run --config vitest.e2e.config.ts",
     "typecheck": "tsc --build",
-    "prepare": "husky"
+    "prepare": "husky",
+    "version": "changeset version",
+    "release": "npm run build && changeset publish"
   },
   "devDependencies": {
+    "@changesets/changelog-github": "^0.5.2",
+    "@changesets/cli": "^2.29.8",
     "@typescript-eslint/eslint-plugin": "^8.18.0",
     "@typescript-eslint/parser": "^8.18.0",
     "@vitest/coverage-v8": "^2.1.8",
@@ -48,8 +52,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/palindrom/maestro.git"
+    "url": "git+https://github.com/chrismlittle123/maestro.git"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "Chris Little",
+  "license": "MIT"
 }
