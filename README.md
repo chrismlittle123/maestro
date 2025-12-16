@@ -67,9 +67,43 @@ Maestro handles the rest - running each agent, passing files between them, and p
 - Not a cloud service yet (runs on your computer first)
 - Not fully autonomous (humans stay in control at key points)
 
+## Installation
+
+### CLI (for end users)
+
+```bash
+npm install -g @chrismlittle123/maestro-cli
+maestro --help
+```
+
+### SDK (for programmatic use)
+
+```bash
+npm install @chrismlittle123/maestro-sdk
+```
+
+```typescript
+import { Maestro } from "@chrismlittle123/maestro-sdk";
+
+const maestro = new Maestro({ projectRoot: "./my-project" });
+const run = await maestro.runWorkflow("my-workflow", { input: "Build a feature" });
+```
+
+## Packages
+
+| Package                                                                                        | Description                      |
+| ---------------------------------------------------------------------------------------------- | -------------------------------- |
+| [`@chrismlittle123/maestro-cli`](https://www.npmjs.com/package/@chrismlittle123/maestro-cli)   | CLI for running workflows        |
+| [`@chrismlittle123/maestro-sdk`](https://www.npmjs.com/package/@chrismlittle123/maestro-sdk)   | SDK for programmatic integration |
+| [`@chrismlittle123/maestro-core`](https://www.npmjs.com/package/@chrismlittle123/maestro-core) | Core engine (internal)           |
+
 ## Status
 
-This is early-stage software. We're building the foundation first, then adding more features.
+This is early-stage software (v0.1.0). We're building the foundation first, then adding more features.
+
+## License
+
+MIT
 
 ---
 

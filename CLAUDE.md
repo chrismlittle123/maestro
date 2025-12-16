@@ -11,27 +11,27 @@ Maestro is a framework for orchestrating AI coding agents that work together lik
 ```
         ┌─────────────────────────────────────┐
         │           Presentation              │  ← CLI, Slack bot, Web UI
-        │         (maestro-cli)               │
+        │  (@chrismlittle123/maestro-cli)     │
         └─────────────────┬───────────────────┘
                           │
         ┌─────────────────▼───────────────────┐
         │           Application               │  ← Use cases, public API
-        │          (@maestro/sdk)             │
+        │  (@chrismlittle123/maestro-sdk)     │
         └─────────────────┬───────────────────┘
                           │
         ┌─────────────────▼───────────────────┘
         │             Domain                  │  ← Business logic, types
-        │          (@maestro/core)            │
+        │  (@chrismlittle123/maestro-core)    │
         └─────────────────────────────────────┘
 ```
 
 ### Package Responsibilities
 
-| Package         | Layer        | Purpose                                                          |
-| --------------- | ------------ | ---------------------------------------------------------------- |
-| `@maestro/core` | Domain       | Internal engine: types, Conductor, WorkflowEngine, interfaces    |
-| `@maestro/sdk`  | Application  | Public API: Maestro class, event subscriptions, workflow control |
-| `maestro-cli`   | Presentation | Reference CLI: terminal commands for end users                   |
+| Package                         | Layer        | Purpose                                                          |
+| ------------------------------- | ------------ | ---------------------------------------------------------------- |
+| `@chrismlittle123/maestro-core` | Domain       | Internal engine: types, Conductor, WorkflowEngine, interfaces    |
+| `@chrismlittle123/maestro-sdk`  | Application  | Public API: Maestro class, event subscriptions, workflow control |
+| `@chrismlittle123/maestro-cli`  | Presentation | Reference CLI: terminal commands for end users                   |
 
 ## Clean Architecture Rules
 
@@ -46,10 +46,10 @@ Dependencies MUST point inward only:
 
 ```typescript
 // ✅ Correct: SDK imports from Core
-import type { MaestroEvent } from "@maestro/core";
+import type { MaestroEvent } from "@chrismlittle123/maestro-core";
 
 // ❌ Wrong: Core should NEVER import from SDK or CLI
-import { Maestro } from "@maestro/sdk"; // FORBIDDEN in core
+import { Maestro } from "@chrismlittle123/maestro-sdk"; // FORBIDDEN in core
 ```
 
 ### 2. Core Defines Interfaces, Outer Layers Implement
@@ -57,7 +57,7 @@ import { Maestro } from "@maestro/sdk"; // FORBIDDEN in core
 Core defines abstractions. SDK/infrastructure provides concrete implementations.
 
 ```typescript
-// In @maestro/core - define the interface
+// In @chrismlittle123/maestro-core - define the interface
 export interface AgentExecutor {
   execute(input: AgentExecutionInput): Promise<AgentExecutionOutput>;
 }
@@ -67,7 +67,7 @@ export interface ArtifactStore {
   load(artifactId: string): Promise<Buffer>;
 }
 
-// In @maestro/sdk or infrastructure - implement it
+// In @chrismlittle123/maestro-sdk or infrastructure - implement it
 class ClaudeCodeExecutor implements AgentExecutor { ... }
 class FileSystemStore implements ArtifactStore { ... }
 class S3Store implements ArtifactStore { ... }
@@ -89,7 +89,7 @@ SDK exposes a stable public API. Internal core changes should not break SDK cons
 
 ```typescript
 // ✅ SDK re-exports stable types
-export type { WorkflowConfig, MaestroEvent } from "@maestro/core";
+export type { WorkflowConfig, MaestroEvent } from "@chrismlittle123/maestro-core";
 
 // SDK provides stable Maestro class that wraps internal complexity
 export class Maestro {
