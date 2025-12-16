@@ -1,0 +1,10 @@
+[project]
+name = "maestro"
+
+[extends]
+eslint = "github:chrismlittle123/check-my-code-private/rulesets/internal/typescript/5.5/eslint@latest"
+tsc = "github:chrismlittle123/check-my-code-private/rulesets/internal/typescript/5.5/tsc@latest"
+
+[prompts]
+templates = ["internal/typescript/5.5"]
+source = "github:chrismlittle123/check-my-code-private/prompts@latest"

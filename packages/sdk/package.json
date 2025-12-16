@@ -1,0 +1,34 @@
+{
+  "name": "@maestro/sdk",
+  "version": "0.1.0",
+  "description": "Public SDK for Maestro - programmatic API for builders",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "clean": "rm -rf dist",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@maestro/core": "*"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.0",
+    "tsup": "^8.3.5",
+    "typescript": "~5.5.4"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}

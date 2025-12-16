@@ -1,0 +1,55 @@
+# Example workflow: Feature Development
+# This workflow demonstrates a typical feature development flow
+
+name: feature-development
+description: End-to-end feature development workflow with review and testing
+
+steps:
+  - id: requirements
+    agent: product-manager
+    automation: partial
+    outputs: [requirements.md]
+    next: design
+
+  - id: design
+    agent: architect
+    automation: partial
+    inputs: [requirements.md]
+    outputs: [design.md]
+    next: implement
+
+  - id: implement
+    agent: developer
+    automation: full
+    inputs: [design.md]
+    outputs: [code]
+    next: review
+
+  - id: review
+    agent: reviewer
+    automation: partial
+    inputs: [code]
+    on_reject: implement
+    next: test
+
+  - id: test
+    agent: qa
+    automation: partial
+    inputs: [code]
+    on_fail: implement
+    next: deploy
+
+  - id: deploy
+    agent: devops
+    automation: full
+    inputs: [code]
+
+timeouts:
+  default: 30m
+  implement: 2h
+  deploy: 15m
+
+budget:
+  max_tokens: 1000000
+  max_cost_usd: 50.00
+  on_exceed: pause
