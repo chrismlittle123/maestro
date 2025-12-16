@@ -1,7 +1,8 @@
 {
-  "name": "maestro-agents-core",
+  "name": "@maestro-agents/core",
   "version": "0.1.0",
-  "description": "Core orchestration engine for Maestro",
+  "private": true,
+  "description": "Core orchestration engine for Maestro (internal)",
   "author": "Chris Little",
   "license": "MIT",
   "repository": {

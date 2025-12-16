@@ -1,6 +1,6 @@
 import { join } from "node:path";
 import { readdir, readFile } from "node:fs/promises";
-import type { MaestroEvent, AgentExecutor, WorkflowRun } from "maestro-agents-core";
+import type { MaestroEvent, AgentExecutor, WorkflowRun } from "@maestro-agents/core";
 import {
   WorkflowEngine,
   FileSystemArtifactStore,
@@ -11,7 +11,7 @@ import {
   tryLoadManifest,
   type AgentDefinition,
   type WorkflowConfig,
-} from "maestro-agents-core";
+} from "@maestro-agents/core";
 import { MockClaudeCodeExecutor } from "./executors/mock-executor.js";
 
 /**

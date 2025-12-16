@@ -2,8 +2,8 @@ import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { mkdir, rm, readFile, readdir } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
-import { FileSystemArtifactStore } from "maestro-agents-core";
-import type { Artifact } from "maestro-agents-core";
+import { FileSystemArtifactStore } from "@maestro-agents/core";
+import type { Artifact } from "@maestro-agents/core";
 
 describe("FileSystemArtifactStore", () => {
   let store: FileSystemArtifactStore;

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { InMemoryEventBus } from "maestro-agents-core";
-import type { MaestroEvent } from "maestro-agents-core";
+import { InMemoryEventBus } from "@maestro-agents/core";
+import type { MaestroEvent } from "@maestro-agents/core";
 
 describe("InMemoryEventBus", () => {
   let bus: InMemoryEventBus;

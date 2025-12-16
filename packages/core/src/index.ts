@@ -1,5 +1,5 @@
 /**
- * maestro-agents-core - Core orchestration engine
+ * @maestro-agents/core - Core orchestration engine
  *
  * This package contains the internal engine for Maestro:
  * - Workflow engine

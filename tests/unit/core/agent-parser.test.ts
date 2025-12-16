@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { parseAgent, AgentParseError } from "maestro-agents-core";
+import { parseAgent, AgentParseError } from "@maestro-agents/core";
 
 describe("parseAgent", () => {
   describe("valid agents", () => {

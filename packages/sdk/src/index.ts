@@ -27,7 +27,7 @@ export type {
   AgentDefinition,
   WorkflowRun,
   WorkflowEngineConfig,
-} from "maestro-agents-core";
+} from "@maestro-agents/core";
 
 // Re-export core utilities needed by consumers
 export {
@@ -52,7 +52,7 @@ export {
   saveManifest,
   loadManifest,
   tryLoadManifest,
-} from "maestro-agents-core";
+} from "@maestro-agents/core";
 
 // Executors (implementations live in SDK, not core)
 export { ClaudeCodeExecutor, MockClaudeCodeExecutor } from "./executors/index.js";

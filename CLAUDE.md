@@ -21,17 +21,19 @@ Maestro is a framework for orchestrating AI coding agents that work together lik
                           │
         ┌─────────────────▼───────────────────┘
         │             Domain                  │  ← Business logic, types
-        │       (maestro-agents-core)         │
+        │       (@maestro-agents/core)        │  (internal, not published)
         └─────────────────────────────────────┘
 ```
 
 ### Package Responsibilities
 
-| Package               | Layer        | Purpose                                                          |
-| --------------------- | ------------ | ---------------------------------------------------------------- |
-| `maestro-agents-core` | Domain       | Internal engine: types, Conductor, WorkflowEngine, interfaces    |
-| `maestro-agents-sdk`  | Application  | Public API: Maestro class, event subscriptions, workflow control |
-| `maestro-agents`      | Presentation | Reference CLI (`mstr`): terminal commands for end users          |
+| Package                | Layer        | Purpose                                                          |
+| ---------------------- | ------------ | ---------------------------------------------------------------- |
+| `@maestro-agents/core` | Domain       | Internal engine: types, Conductor, WorkflowEngine, interfaces    |
+| `maestro-agents-sdk`   | Application  | Public API: Maestro class, event subscriptions, workflow control |
+| `maestro-agents`       | Presentation | Reference CLI (`mstr`): terminal commands for end users          |
+
+Note: `@maestro-agents/core` is an internal package (not published to npm). It is bundled into `maestro-agents-sdk`.
 
 ## Clean Architecture Rules
 
@@ -46,7 +48,7 @@ Dependencies MUST point inward only:
 
 ```typescript
 // ✅ Correct: SDK imports from Core
-import type { MaestroEvent } from "maestro-agents-core";
+import type { MaestroEvent } from "@maestro-agents/core";
 
 // ❌ Wrong: Core should NEVER import from SDK or CLI
 import { Maestro } from "maestro-agents-sdk"; // FORBIDDEN in core
@@ -57,7 +59,7 @@ import { Maestro } from "maestro-agents-sdk"; // FORBIDDEN in core
 Core defines abstractions. SDK/infrastructure provides concrete implementations.
 
 ```typescript
-// In maestro-agents-core - define the interface
+// In @maestro-agents/core - define the interface
 export interface AgentExecutor {
   execute(input: AgentExecutionInput): Promise<AgentExecutionOutput>;
 }
@@ -89,7 +91,7 @@ SDK exposes a stable public API. Internal core changes should not break SDK cons
 
 ```typescript
 // ✅ SDK re-exports stable types
-export type { WorkflowConfig, MaestroEvent } from "maestro-agents-core";
+export type { WorkflowConfig, MaestroEvent } from "@maestro-agents/core";
 
 // SDK provides stable Maestro class that wraps internal complexity
 export class Maestro {

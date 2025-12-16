@@ -40,7 +40,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "maestro-agents-core": "*"
+    "@maestro-agents/core": "*"
   },
   "devDependencies": {
     "@types/node": "^25.0.0",

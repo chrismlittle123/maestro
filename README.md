@@ -91,11 +91,10 @@ const run = await maestro.runWorkflow("my-workflow", { input: "Build a feature" 
 
 ## Packages
 
-| Package                                                                    | Description                      |
-| -------------------------------------------------------------------------- | -------------------------------- |
-| [`maestro-agents`](https://www.npmjs.com/package/maestro-agents)           | CLI for running workflows        |
-| [`maestro-agents-sdk`](https://www.npmjs.com/package/maestro-agents-sdk)   | SDK for programmatic integration |
-| [`maestro-agents-core`](https://www.npmjs.com/package/maestro-agents-core) | Core engine (internal)           |
+| Package                                                                  | Description                      |
+| ------------------------------------------------------------------------ | -------------------------------- |
+| [`maestro-agents`](https://www.npmjs.com/package/maestro-agents)         | CLI for running workflows        |
+| [`maestro-agents-sdk`](https://www.npmjs.com/package/maestro-agents-sdk) | SDK for programmatic integration |
 
 ## Status
 

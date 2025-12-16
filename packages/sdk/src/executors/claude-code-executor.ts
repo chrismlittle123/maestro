@@ -3,7 +3,7 @@ import type {
   AgentExecutionInput,
   AgentExecutionOutput,
   Artifact,
-} from "maestro-agents-core";
+} from "@maestro-agents/core";
 
 /**
  * Options for the Claude Code executor
