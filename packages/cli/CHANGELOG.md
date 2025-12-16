@@ -1,5 +1,14 @@
 # maestro-agents
 
+## 0.1.3
+
+### Patch Changes
+
+- [`9e5032f`](https://github.com/chrismlittle123/maestro/commit/9e5032f7fa5991b1bb3b5ca1d43b90f32294d16e) Thanks [@chrismlittle123](https://github.com/chrismlittle123)! - CI improvements for reliable OIDC publishing
+
+- Updated dependencies [[`9e5032f`](https://github.com/chrismlittle123/maestro/commit/9e5032f7fa5991b1bb3b5ca1d43b90f32294d16e)]:
+  - maestro-agents-sdk@0.1.3
+
 ## 0.1.2
 
 ### Patch Changes
