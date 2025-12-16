@@ -24,7 +24,6 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@maestro/core": "*",
     "@maestro/sdk": "*",
     "chalk": "^5.3.0",
     "cli-table3": "^0.6.5",

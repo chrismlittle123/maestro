@@ -48,8 +48,8 @@ export {
 } from "./artifacts/index.js";
 export type { WorkflowManifest, ManifestStep, StepStatus } from "./artifacts/index.js";
 
-// Executors
-export { ClaudeCodeExecutor, MockClaudeCodeExecutor } from "./executors/index.js";
+// Note: Executors (ClaudeCodeExecutor, MockClaudeCodeExecutor) have been moved to @maestro/sdk
+// to maintain clean architecture. Core only defines the AgentExecutor interface.
 
 // Core classes
 export { Conductor } from "./conductor.js";

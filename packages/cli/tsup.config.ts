@@ -12,5 +12,5 @@ export default defineConfig({
   clean: true,
   target: "node22",
   // Don't bundle dependencies - they'll be installed
-  external: ["@maestro/core", "@maestro/sdk"],
+  external: ["@maestro/sdk"],
 });

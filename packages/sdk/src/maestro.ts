@@ -1,4 +1,18 @@
-import type { MaestroEvent } from "@maestro/core";
+import { join } from "node:path";
+import { readdir, readFile } from "node:fs/promises";
+import type { MaestroEvent, AgentExecutor, WorkflowRun } from "@maestro/core";
+import {
+  WorkflowEngine,
+  FileSystemArtifactStore,
+  InMemoryEventBus,
+  DEFAULT_ARTIFACTS_DIR,
+  parseWorkflow,
+  parseAgent,
+  tryLoadManifest,
+  type AgentDefinition,
+  type WorkflowConfig,
+} from "@maestro/core";
+import { MockClaudeCodeExecutor } from "./executors/mock-executor.js";
 
 /**
  * Configuration for Maestro SDK
@@ -19,6 +33,11 @@ export interface MaestroConfig {
    * @default ~/.maestro/artifacts
    */
   artifactsDir?: string;
+
+  /**
+   * Custom executor to use (defaults to MockClaudeCodeExecutor)
+   */
+  executor?: AgentExecutor;
 
   /**
    * Enable debug logging
@@ -47,9 +66,19 @@ export interface WorkflowRunHandle {
   status: "pending" | "running" | "paused" | "completed" | "failed";
 
   /**
+   * Error message if failed
+   */
+  error?: string;
+
+  /**
+   * Artifacts produced
+   */
+  artifacts: string[];
+
+  /**
    * Wait for the workflow to complete
    */
-  wait(): Promise<void>;
+  wait(): Promise<WorkflowRunHandle>;
 
   /**
    * Cancel the workflow
@@ -85,70 +114,199 @@ type EventHandler<T extends MaestroEvent = MaestroEvent> = (event: T) => void | 
  */
 export class Maestro {
   private config: MaestroConfig;
-  private handlers: Map<string, Set<EventHandler>> = new Map();
+  private eventBus: InMemoryEventBus;
+  private artifactStore: FileSystemArtifactStore;
+  private executor: AgentExecutor;
+  private engine: WorkflowEngine;
+  private runs: Map<string, WorkflowRun> = new Map();
 
   constructor(config: MaestroConfig) {
     this.config = config;
+
+    // Initialize infrastructure
+    const artifactsDir = config.artifactsDir || DEFAULT_ARTIFACTS_DIR;
+    this.eventBus = new InMemoryEventBus();
+    this.artifactStore = new FileSystemArtifactStore(artifactsDir);
+    this.executor = config.executor || new MockClaudeCodeExecutor();
+
+    // Create workflow engine
+    this.engine = new WorkflowEngine(this.executor, this.artifactStore, this.eventBus, {
+      workflowsDir: config.workflowsDir,
+      agentsDir: config.agentsDir,
+      artifactsDir,
+    });
   }
 
   /**
    * Run a workflow
    */
-  async runWorkflow(workflowName: string, _options: { input: string }): Promise<WorkflowRunHandle> {
-    // TODO: Implement workflow execution
-    const runId = this.generateRunId();
+  async runWorkflow(
+    workflowName: string,
+    options: { input: string }
+  ): Promise<WorkflowRunHandle> {
+    // Load workflow
+    const workflow = await this.loadWorkflowFile(workflowName);
 
-    return {
-      id: runId,
-      workflowName,
-      status: "pending",
+    // Load agents referenced in workflow
+    const agents = new Map<string, AgentDefinition>();
+    for (const step of workflow.steps) {
+      if (!agents.has(step.agent)) {
+        const agent = await this.loadAgentFile(step.agent);
+        agents.set(step.agent, agent);
+      }
+    }
+
+    // Run workflow
+    const run = await this.engine.run(workflow, agents, options.input);
+    this.runs.set(run.id, run);
+
+    // Create handle
+    const handle: WorkflowRunHandle = {
+      id: run.id,
+      workflowName: run.workflowName,
+      status: run.status,
+      error: run.error,
+      artifacts: run.artifacts.map((a) => a.path),
       wait: async () => {
-        // TODO: Implement wait logic
+        // For now, workflows run synchronously, so just return current state
+        const currentRun = this.runs.get(run.id);
+        if (currentRun) {
+          handle.status = currentRun.status;
+          handle.error = currentRun.error;
+          handle.artifacts = currentRun.artifacts.map((a) => a.path);
+        }
+        return handle;
       },
       cancel: async () => {
-        // TODO: Implement cancel logic
+        if (run.currentStepId) {
+          await this.executor.cancel(run.id, run.currentStepId);
+        }
       },
     };
+
+    return handle;
   }
 
   /**
    * Approve a step in a workflow
    */
   async approve(runId: string, stepId: string): Promise<void> {
-    // TODO: Implement approval logic
-    console.log(`Approving step ${stepId} in run ${runId}`);
+    // TODO: Implement approval logic for v0.3.0
+    if (this.config.debug) {
+      console.log(`Approving step ${stepId} in run ${runId}`);
+    }
   }
 
   /**
    * Reject a step in a workflow
    */
   async reject(runId: string, stepId: string, reason: string): Promise<void> {
-    // TODO: Implement rejection logic
-    console.log(`Rejecting step ${stepId} in run ${runId}: ${reason}`);
+    // TODO: Implement rejection logic for v0.3.0
+    if (this.config.debug) {
+      console.log(`Rejecting step ${stepId} in run ${runId}: ${reason}`);
+    }
   }
 
   /**
    * Get the status of a workflow run
    */
-  async getStatus(_runId: string): Promise<WorkflowRunHandle | null> {
-    // TODO: Implement status retrieval
-    return null;
+  async getStatus(runId: string): Promise<WorkflowRunHandle | null> {
+    // Check in-memory runs first
+    const run = this.runs.get(runId);
+    if (run) {
+      return {
+        id: run.id,
+        workflowName: run.workflowName,
+        status: run.status,
+        error: run.error,
+        artifacts: run.artifacts.map((a) => a.path),
+        wait: async () => this.getStatus(runId) as Promise<WorkflowRunHandle>,
+        cancel: async () => {
+          if (run.currentStepId) {
+            await this.executor.cancel(run.id, run.currentStepId);
+          }
+        },
+      };
+    }
+
+    // Try to load from manifest
+    const artifactsDir = this.config.artifactsDir || DEFAULT_ARTIFACTS_DIR;
+    const runDir = join(artifactsDir, runId);
+    const manifest = await tryLoadManifest(runDir);
+
+    if (!manifest) {
+      return null;
+    }
+
+    return {
+      id: manifest.id,
+      workflowName: manifest.workflowName,
+      status: manifest.status,
+      error: manifest.error,
+      artifacts: manifest.steps.flatMap((s) => s.artifacts),
+      wait: async () => this.getStatus(runId) as Promise<WorkflowRunHandle>,
+      cancel: async () => {
+        // Can't cancel completed runs
+      },
+    };
   }
 
   /**
    * List all available workflows
    */
   async listWorkflows(): Promise<string[]> {
-    // TODO: Implement workflow listing
-    return [];
+    try {
+      const entries = await readdir(this.config.workflowsDir, { withFileTypes: true });
+      return entries
+        .filter((e) => e.isFile() && (e.name.endsWith(".yaml") || e.name.endsWith(".yml")))
+        .map((e) => e.name.replace(/\.ya?ml$/, ""));
+    } catch {
+      return [];
+    }
   }
 
   /**
    * List all available agents
    */
   async listAgents(): Promise<string[]> {
-    // TODO: Implement agent listing
-    return [];
+    try {
+      const entries = await readdir(this.config.agentsDir, { withFileTypes: true });
+      return entries
+        .filter((e) => e.isFile() && e.name.endsWith(".md"))
+        .map((e) => e.name.replace(/\.md$/, ""));
+    } catch {
+      return [];
+    }
+  }
+
+  /**
+   * List recent workflow runs
+   */
+  async listRuns(limit: number = 10): Promise<WorkflowRunHandle[]> {
+    const artifactsDir = this.config.artifactsDir || DEFAULT_ARTIFACTS_DIR;
+
+    try {
+      const entries = await readdir(artifactsDir, { withFileTypes: true });
+      const runDirs = entries
+        .filter((e) => e.isDirectory())
+        .map((e) => e.name)
+        .sort()
+        .reverse()
+        .slice(0, limit);
+
+      const handles: WorkflowRunHandle[] = [];
+
+      for (const dir of runDirs) {
+        const status = await this.getStatus(dir);
+        if (status) {
+          handles.push(status);
+        }
+      }
+
+      return handles;
+    } catch {
+      return [];
+    }
   }
 
   /**
@@ -158,10 +316,14 @@ export class Maestro {
     eventType: T,
     handler: EventHandler<Extract<MaestroEvent, { type: T }>>
   ): void {
-    if (!this.handlers.has(eventType)) {
-      this.handlers.set(eventType, new Set());
-    }
-    this.handlers.get(eventType)!.add(handler as EventHandler);
+    this.eventBus.on(eventType, handler);
+  }
+
+  /**
+   * Subscribe to all events
+   */
+  onAny(handler: EventHandler): void {
+    this.eventBus.onAny(handler);
   }
 
   /**
@@ -171,7 +333,7 @@ export class Maestro {
     eventType: T,
     handler: EventHandler<Extract<MaestroEvent, { type: T }>>
   ): void {
-    this.handlers.get(eventType)?.delete(handler as EventHandler);
+    this.eventBus.off(eventType, handler);
   }
 
   /**
@@ -181,9 +343,35 @@ export class Maestro {
     return { ...this.config };
   }
 
-  private generateRunId(): string {
-    const timestamp = new Date().toISOString().split("T")[0];
-    const random = Math.random().toString(36).substring(2, 8);
-    return `${timestamp}-${random}`;
+  /**
+   * Get the event bus (for advanced use cases)
+   */
+  getEventBus(): InMemoryEventBus {
+    return this.eventBus;
+  }
+
+  /**
+   * Get the artifact store (for advanced use cases)
+   */
+  getArtifactStore(): FileSystemArtifactStore {
+    return this.artifactStore;
+  }
+
+  /**
+   * Load a workflow file
+   */
+  private async loadWorkflowFile(name: string): Promise<WorkflowConfig> {
+    const filePath = join(this.config.workflowsDir, `${name}.yaml`);
+    const content = await readFile(filePath, "utf-8");
+    return parseWorkflow(content);
+  }
+
+  /**
+   * Load an agent file
+   */
+  private async loadAgentFile(name: string): Promise<AgentDefinition> {
+    const filePath = join(this.config.agentsDir, `${name}.md`);
+    const content = await readFile(filePath, "utf-8");
+    return parseAgent(content);
   }
 }

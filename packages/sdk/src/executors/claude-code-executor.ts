@@ -1,5 +1,31 @@
-import type { AgentExecutor, AgentExecutionInput, AgentExecutionOutput } from "../types/agent.js";
-import type { Artifact } from "../types/artifact.js";
+import type {
+  AgentExecutor,
+  AgentExecutionInput,
+  AgentExecutionOutput,
+  Artifact,
+} from "@maestro/core";
+
+/**
+ * Options for the Claude Code executor
+ */
+export interface ClaudeCodeExecutorOptions {
+  /**
+   * Whether to bypass permission checks.
+   * WARNING: Only enable this in trusted environments.
+   * @default false
+   */
+  dangerouslyBypassPermissions?: boolean;
+
+  /**
+   * Working directory for the agent
+   */
+  workingDirectory?: string;
+
+  /**
+   * Maximum number of turns for the agent
+   */
+  maxTurns?: number;
+}
 
 /**
  * Claude Code SDK executor for running agents
@@ -10,6 +36,14 @@ import type { Artifact } from "../types/artifact.js";
  */
 export class ClaudeCodeExecutor implements AgentExecutor {
   private runningExecutions: Map<string, AbortController> = new Map();
+  private options: ClaudeCodeExecutorOptions;
+
+  constructor(options: ClaudeCodeExecutorOptions = {}) {
+    this.options = {
+      dangerouslyBypassPermissions: false,
+      ...options,
+    };
+  }
 
   /**
    * Execute an agent with the given input
@@ -31,15 +65,30 @@ export class ClaudeCodeExecutor implements AgentExecutor {
       let inputTokens = 0;
       let outputTokens = 0;
 
+      // Build options based on configuration
+      const queryOptions: Record<string, unknown> = {
+        abortController,
+        systemPrompt: input.prompt,
+      };
+
+      // Only bypass permissions if explicitly enabled
+      if (this.options.dangerouslyBypassPermissions) {
+        queryOptions.permissionMode = "bypassPermissions";
+        queryOptions.allowDangerouslySkipPermissions = true;
+      }
+
+      if (this.options.workingDirectory) {
+        queryOptions.workingDirectory = this.options.workingDirectory;
+      }
+
+      if (this.options.maxTurns) {
+        queryOptions.maxTurns = this.options.maxTurns;
+      }
+
       // Run the query
       const queryResult = query({
         prompt: fullPrompt,
-        options: {
-          abortController,
-          systemPrompt: input.prompt,
-          permissionMode: "bypassPermissions",
-          allowDangerouslySkipPermissions: true,
-        },
+        options: queryOptions,
       });
 
       // Process messages
@@ -148,83 +197,5 @@ export class ClaudeCodeExecutor implements AgentExecutor {
     }
 
     return parts.join("\n");
-  }
-}
-
-/**
- * Mock executor for testing without the Claude SDK
- */
-export class MockClaudeCodeExecutor implements AgentExecutor {
-  private mockResponse: string;
-  private shouldFail: boolean;
-
-  constructor(options: { mockResponse?: string; shouldFail?: boolean } = {}) {
-    this.mockResponse = options.mockResponse || "Mock response from agent";
-    this.shouldFail = options.shouldFail || false;
-  }
-
-  async execute(input: AgentExecutionInput): Promise<AgentExecutionOutput> {
-    // Simulate some processing time
-    await new Promise((resolve) => setTimeout(resolve, 100));
-
-    if (this.shouldFail) {
-      return {
-        success: false,
-        artifacts: [],
-        error: "Mock execution failed",
-      };
-    }
-
-    const artifact: Artifact = {
-      id: `${input.workflowId}-${input.stepId}-result`,
-      workflowId: input.workflowId,
-      stepId: input.stepId,
-      name: "result.md",
-      type: "text",
-      path: "",
-      createdAt: new Date(),
-    };
-
-    return {
-      success: true,
-      artifacts: [artifact],
-      tokenUsage: {
-        input: 100,
-        output: 50,
-        total: 150,
-      },
-    };
-  }
-
-  async cancel(_workflowId: string, _stepId: string): Promise<void> {
-    // No-op for mock
-  }
-
-  async getStatus(
-    _workflowId: string,
-    _stepId: string
-  ): Promise<"pending" | "running" | "completed" | "failed" | "cancelled"> {
-    return "completed";
-  }
-
-  /**
-   * Set mock response for testing
-   */
-  setMockResponse(response: string): void {
-    this.mockResponse = response;
-  }
-
-  /**
-   * Set whether execution should fail
-   */
-  setShouldFail(shouldFail: boolean): void {
-    this.shouldFail = shouldFail;
-  }
-
-  /**
-   * Get the mock response
-   */
-  getMockResponse(): string {
-    return this.mockResponse;
   }
 }
