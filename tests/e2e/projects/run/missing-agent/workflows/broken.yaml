@@ -1,0 +1,6 @@
+name: broken
+description: Workflow that references a non-existent agent
+steps:
+  - id: step1
+    agent: nonexistent-agent
+    automation: full

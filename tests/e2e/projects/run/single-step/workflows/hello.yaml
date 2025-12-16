@@ -1,0 +1,7 @@
+name: hello
+description: Simple test workflow
+steps:
+  - id: greet
+    agent: greeter
+    automation: full
+    outputs: [greeting.md]

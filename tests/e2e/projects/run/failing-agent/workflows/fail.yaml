@@ -1,0 +1,6 @@
+name: fail
+description: Workflow with an agent that will fail
+steps:
+  - id: fail-step
+    agent: failer
+    automation: full
