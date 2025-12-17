@@ -1,1 +1,7 @@
+#!/bin/sh
+
+# Run lint-staged for code formatting and linting
 npx lint-staged
+
+# Check kebab-case directory names in tests/e2e/projects
+./.github/scripts/check-kebab-case.sh
